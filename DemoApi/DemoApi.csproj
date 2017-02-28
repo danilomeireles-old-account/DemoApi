@@ -44,6 +44,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\DemoApi.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
@@ -144,7 +145,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Brand\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -152,6 +152,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\CategoryController.cs" />
     <Compile Include="Controllers\BrandController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Global.asax.cs">
@@ -198,6 +199,9 @@
     <EmbeddedResource Include="Migrations\201702272310560_InitialCreate.resx">
       <DependentUpon>201702272310560_InitialCreate.cs</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\PublishProfiles\Default Settings.pubxml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
