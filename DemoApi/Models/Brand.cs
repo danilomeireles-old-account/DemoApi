@@ -1,5 +1,4 @@
-﻿using DemoApi.Persistence.Repositories;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DemoApi.Models

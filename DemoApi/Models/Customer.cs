@@ -21,5 +21,7 @@ namespace DemoApi.Models
         [DataType(DataType.EmailAddress)]
         [Index("unique_email", IsUnique = true)]
         public string EmailAddress { get; set; }        
+
+        public ShoppingCart ShoppingCart { get; set; }
     }
 }

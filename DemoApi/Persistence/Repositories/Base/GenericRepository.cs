@@ -28,7 +28,7 @@ namespace DemoApi.Persistence.Repositories.Base
             return entity.ToList();
         }
 
-        public IEnumerable<T> FindAll(string orderByProperty)
+        public virtual IEnumerable<T> FindAll(string orderByProperty)
         {
             return entity.ToList().OrderBy(orderByProperty);
         }
