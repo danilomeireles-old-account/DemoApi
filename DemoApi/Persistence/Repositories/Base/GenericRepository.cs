@@ -9,8 +9,8 @@ namespace DemoApi.Persistence.Repositories.Base
 {
     public class GenericRepository<T> where T : class
     {
-        protected readonly DemoApiContext context;
-        private readonly DbSet<T> entity;
+        private readonly DemoApiContext context;
+        protected readonly DbSet<T> entity;
 
         public GenericRepository()
         {
@@ -18,32 +18,37 @@ namespace DemoApi.Persistence.Repositories.Base
             entity = context.Set<T>();
         }
                 
-        public T FindById(params object[] keyValues)
+        public virtual T GetById(params object[] keyValues)
         {
             return entity.Find(keyValues);
         }
 
-        public IEnumerable<T> FindAll()
+        public virtual IEnumerable<T> GetAll()
         {
             return entity.ToList();
         }
 
-        public virtual IEnumerable<T> FindAll(string orderByProperty)
+        public virtual IEnumerable<T> GetAllOrderBy(string orderByProperty)
         {
             return entity.ToList().OrderBy(orderByProperty);
         }
 
-        public IEnumerable<T> Find(Expression<Func<T, bool>> predicate)
+        public virtual IEnumerable<T> Find(Expression<Func<T, bool>> predicate)
         {
             return entity.Where(predicate);
         }
 
-        public IEnumerable<T> FindAllByProperty(string propertyName, object propertyValue)
+        public virtual IEnumerable<T> GetAllByProperty(string propertyName, object propertyValue)
         {            
             return entity.Where(propertyName + "= @0", propertyValue);
         }
 
-        public T FindOneByProperty(string propertyName, object propertyValue)
+        public virtual IEnumerable<T> GetAllByPropertyILike(string propertyName, string propertyValue)
+        {                                  
+            return entity.Where(propertyName + ".ToLower().Contains(" + "\"" + propertyValue.ToLower() + "\"" + ")");
+        }
+
+        public virtual T GetOneByProperty(string propertyName, object propertyValue)
         {
             //Ex: List<Car> cars = dbContext.Cars.Where("CarYear = @0 and ABS = @1", 2006, true).ToList();
             return entity.Where(propertyName + "= @0", propertyValue).SingleOrDefault();

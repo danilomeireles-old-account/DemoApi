@@ -9,12 +9,11 @@ namespace DemoApi.Persistence.Repositories
 {
     public class CustomerRepository : GenericRepository<Customer>
     {
-        public override IEnumerable<Customer> FindAll(string orderByProperty)
-        {
-            return context.Customers
-                .Include(c => c.ShoppingCart)
-                .OrderBy(orderByProperty)
-                .ToList();
-        }
+        /*
+            Add a method in this class
+            only when the GenericRepository class
+            does not solve your problem.            
+            Please, do not repeat code!
+        */
     }
 }
