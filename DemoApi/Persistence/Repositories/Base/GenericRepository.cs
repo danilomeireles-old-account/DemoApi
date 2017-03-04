@@ -9,8 +9,8 @@ namespace DemoApi.Persistence.Repositories.Base
 {
     public class GenericRepository<T> where T : class
     {
-        protected readonly DemoApiContext context;
-        private readonly DbSet<T> entity;
+        private readonly DemoApiContext context;
+        protected readonly DbSet<T> entity;
 
         public GenericRepository()
         {
@@ -18,35 +18,140 @@ namespace DemoApi.Persistence.Repositories.Base
             entity = context.Set<T>();
         }
                 
-        public T FindById(params object[] keyValues)
+        public virtual T GetById(params object[] keyValues)
         {
             return entity.Find(keyValues);
         }
-
-        public IEnumerable<T> FindAll()
+        
+        public virtual T GetById(int id, string[] includes)
         {
+            var query = entity.AsQueryable();
+            foreach (string include in includes)
+                query = query.Include(include);
+            
+            return query.AsNoTracking().Where("Id" + "= @0", id).FirstOrDefault();
+        }
+
+        public virtual T GetById(string idPropertyName, object idPropertyValue, string[] includes)
+        {
+            var query = entity.AsQueryable();
+            foreach (string include in includes)
+                query = query.Include(include);
+
+            return query.AsNoTracking().Where(idPropertyName + "= @0", idPropertyValue).FirstOrDefault();
+        }
+
+        public virtual IEnumerable<T> GetAll()
+        {            
             return entity.ToList();
         }
 
-        public virtual IEnumerable<T> FindAll(string orderByProperty)
+        public virtual IEnumerable<T> GetAll(string[] includes)
+        {
+            var query = entity.AsQueryable();
+            foreach (string include in includes)
+                query = query.Include(include);
+
+            return query.ToList();
+        }
+
+        public virtual IEnumerable<T> GetAllOrderBy(string orderByProperty)
         {
             return entity.ToList().OrderBy(orderByProperty);
         }
 
-        public IEnumerable<T> Find(Expression<Func<T, bool>> predicate)
+        public virtual IEnumerable<T> GetAllOrderBy(string orderByProperty, string[] includes)
+        {
+            var query = entity.AsQueryable();
+            foreach (string include in includes)
+                query = query.Include(include);
+
+            return query.OrderBy(orderByProperty).ToList();
+        }
+
+        public virtual IEnumerable<T> Find(Expression<Func<T, bool>> predicate)
         {
             return entity.Where(predicate);
         }
 
-        public IEnumerable<T> FindAllByProperty(string propertyName, object propertyValue)
-        {            
+        public virtual IEnumerable<T> GetAllByProperty(string propertyName, object propertyValue)
+        {
+            // TODO: Verify propertyValue types here.
+            /*
+                sbyte
+                byte
+                short
+                ushort
+                int
+                uint
+                long
+                ulong
+                float
+                double
+                decimal
+                DateTime 
+            */
+
             return entity.Where(propertyName + "= @0", propertyValue);
         }
 
-        public T FindOneByProperty(string propertyName, object propertyValue)
+        public virtual IEnumerable<T> GetAllByProperty(string propertyName, object propertyValue, string[] includes)
+        {
+            var query = entity.AsQueryable();
+            foreach (string include in includes)
+                query = query.Include(include);
+
+            // TODO: Verify propertyValue types here.
+            /*
+                sbyte
+                byte
+                short
+                ushort
+                int
+                uint
+                long
+                ulong
+                float
+                double
+                decimal
+                DateTime 
+            */
+            int intId;
+            bool isInt = int.TryParse(propertyValue.ToString(), out intId);
+
+            if (isInt)                           
+                return query.Where(propertyName + "= @0", Convert.ToInt32(propertyValue));
+            else
+                return query.Where(propertyName + "= @0", propertyValue);
+        }        
+
+        public virtual IEnumerable<T> GetAllByPropertyILike(string propertyName, string propertyValue)
+        {
+            return entity.Where(propertyName + ".ToLower().Contains(" + "\"" + propertyValue.ToLower() + "\"" + ")");
+        }
+
+        public virtual IEnumerable<T> GetAllByPropertyILike(string propertyName, string propertyValue, string[] includes)
+        {
+            var query = entity.AsQueryable();
+            foreach (string include in includes)
+                query = query.Include(include);
+
+            return query.Where(propertyName + ".ToLower().Contains(" + "\"" + propertyValue.ToLower() + "\"" + ")");
+        }
+
+        public virtual T GetOneByProperty(string propertyName, object propertyValue)
         {
             //Ex: List<Car> cars = dbContext.Cars.Where("CarYear = @0 and ABS = @1", 2006, true).ToList();
             return entity.Where(propertyName + "= @0", propertyValue).SingleOrDefault();
+        }
+
+        public virtual T GetOneByProperty(string propertyName, object propertyValue, string[] includes)
+        {
+            var query = entity.AsQueryable();
+            foreach (string include in includes)
+                query = query.Include(include);
+
+            return query.Where(propertyName + "= @0", propertyValue).SingleOrDefault();
         }
 
         public bool Exists(string propertyName, object propertyValue)

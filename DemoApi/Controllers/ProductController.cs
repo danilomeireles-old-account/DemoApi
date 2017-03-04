@@ -1,58 +1,70 @@
-﻿#pragma warning disable 1591
-
+﻿using DemoApi.Dtos;
 using DemoApi.Models;
 using DemoApi.Persistence.Repositories;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Web;
 using System.Web.Http;
-using System.Web.Http.Description;
+using Omu.ValueInjecter;
 
 namespace DemoApi.Controllers
 {
     public class ProductController : ApiController
     {
-        /*
-            https://docs.microsoft.com/en-us/azure/best-practices-api-implementation 
-        */
-
-        ProductRepository productRepository;
+        private readonly ProductRepository productRepository;
+        private readonly string[] includes;
 
         public ProductController()
         {
             productRepository = new ProductRepository();
+            includes = new string[] { "Category", "Brand" };
         }
 
-        // GET: api/Product        
-        [ResponseType(typeof(IEnumerable<Product>))]
+        [Route("api/Product/GetAll"), HttpGet]
         public IHttpActionResult GetAll()
         {
-            var products = productRepository.FindAll(orderByProperty: "Name");
+            var products = productRepository.GetAll(includes);
             return Ok(products);
         }
 
-        // GET: api/Product/5
-        [HttpGet]
-        [ResponseType(typeof(Product))]
-        public IHttpActionResult Get(int id)
+        [Route("api/Product/GetAllOrderBy/{propertyName}"), HttpGet]
+        public IHttpActionResult GetAllOrderBy(string propertyName)
         {
-            var product = productRepository.FindById(id);
+            var products = productRepository.GetAllOrderBy(propertyName, includes);
+            return Ok(products);
+        }
 
-            if (product == null)
-                return NotFound();
-
+        [Route("api/Product/GetById/{id:int}"), HttpGet]
+        public IHttpActionResult GetById(int id)
+        {
+            var product = productRepository.GetById(id, includes);
             return Ok(product);
         }
 
-        // POST: api/Product
-        [ResponseType(typeof(Product))]
+        [Route("api/Product/GetAllByProperty/{propertyName}/{propertyValue}"), HttpGet]
+        public IHttpActionResult GetAllByProperty(string propertyName, string propertyValue)
+        {
+            var products = productRepository.GetAllByProperty(propertyName, propertyValue, includes);
+            return Ok(products);
+        }
+
+        [Route("api/Product/GetAllByPropertyILike/{propertyName}/{propertyValue}"), HttpGet]
+        public IHttpActionResult GetAllByPropertyILike(string propertyName, string propertyValue)
+        {
+            var products = productRepository.GetAllByPropertyILike(propertyName, propertyValue, includes);
+            return Ok(products);
+        }
+
+        [Route("api/Product/Post"), HttpPost]
         public IHttpActionResult Post([FromBody]Product product)
         {
             productRepository.Add(product);
             productRepository.SaveChanges();
-            return CreatedAtRoute("DefaultApi", new { id = product.Id }, product);
+            return Ok(product);
         }
 
-        // PUT: api/Product/5
-        [ResponseType(typeof(Product))]
+        [Route("api/Product/Put"), HttpPut]
         public IHttpActionResult Put(int id, [FromBody]Product product)
         {
             if (id != product.Id)
@@ -60,24 +72,20 @@ namespace DemoApi.Controllers
 
             productRepository.Update(product);
             productRepository.SaveChanges();
-
             return Ok(product);
         }
 
-        // DELETE: api/Product/5
-        [ResponseType(typeof(Product))]
+        [Route("api/Product/Delete/{id:int}"), HttpDelete]
         public IHttpActionResult Delete(int id)
         {
-            Product product = productRepository.FindById(id);
+            var product = productRepository.GetById(id);
 
             if (product == null)
                 return NotFound();
 
             productRepository.Remove(product);
             productRepository.SaveChanges();
-
             return Ok(product);
         }
     }
 }
-#pragma warning restore 1591

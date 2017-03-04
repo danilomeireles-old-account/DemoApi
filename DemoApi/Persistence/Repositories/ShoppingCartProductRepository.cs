@@ -9,18 +9,16 @@ namespace DemoApi.Persistence.Repositories
 {
     public class ShoppingCartProductRepository : GenericRepository<ShoppingCartProduct>
     {
-        public override IEnumerable<ShoppingCartProduct> FindAll(string orderByProperty)
-        {
-            return context.ShoppingCartProducts
-                .Include(scp => scp.ShoppingCart)
-                .Include(scp => scp.Product)
-                .OrderBy(orderByProperty)
-                .ToList();
-        }
+        /*
+            Add a method in this class
+            only when the GenericRepository class
+            does not solve your problem.            
+            Please, do not repeat code!
+        */
 
         public ShoppingCartProduct FindByCompositeKey(int shoppingCartId, int productId)
         {
-            return context.ShoppingCartProducts
+            return entity
                 .Where(scp => scp.ShoppingCartId == shoppingCartId && scp.ProductId == productId)
                 .Include(scp => scp.ShoppingCart)
                 .Include(scp => scp.Product)

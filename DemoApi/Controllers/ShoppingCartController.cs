@@ -1,83 +1,85 @@
-﻿#pragma warning disable 1591
-
+﻿using DemoApi.Dtos;
 using DemoApi.Models;
 using DemoApi.Persistence.Repositories;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Web;
 using System.Web.Http;
-using System.Web.Http.Description;
+using Omu.ValueInjecter;
 
 namespace DemoApi.Controllers
 {
     public class ShoppingCartController : ApiController
     {
-        /*
-            https://docs.microsoft.com/en-us/azure/best-practices-api-implementation 
-        */
-
-        ShoppingCartRepository shoppingCartRepository;
+        private readonly ShoppingCartRepository shoppingCartRepository;
+        private readonly string[] includes;
 
         public ShoppingCartController()
         {
             shoppingCartRepository = new ShoppingCartRepository();
+            includes = new string[] { "Customer" };
         }
 
-        // GET: api/ShoppingCart        
-        [ResponseType(typeof(IEnumerable<ShoppingCart>))]
+        [Route("api/ShoppingCart/GetAll"), HttpGet]
         public IHttpActionResult GetAll()
         {
-            var shoppingCarts = shoppingCartRepository.FindAll(orderByProperty: "CreationDate");
+            var shoppingCarts = shoppingCartRepository.GetAll(includes);
             return Ok(shoppingCarts);
         }
 
-        // GET: api/ShoppingCart/5
-        [HttpGet]
-        [ResponseType(typeof(ShoppingCart))]
-        public IHttpActionResult Get(int id)
+        [Route("api/ShoppingCart/GetAllOrderBy/{propertyName}"), HttpGet]
+        public IHttpActionResult GetAllOrderBy(string propertyName)
         {
-            var shoppingCart = shoppingCartRepository.FindById(id);
+            var shoppingCarts = shoppingCartRepository.GetAllOrderBy(propertyName, includes);
+            return Ok(shoppingCarts);
+        }
 
-            if (shoppingCart == null)
-                return NotFound();
-
+        [Route("api/ShoppingCart/GetById/{id:int}"), HttpGet]
+        public IHttpActionResult GetById(int id)
+        {
+            var shoppingCart = shoppingCartRepository.GetById("CustomerId", id, includes);
             return Ok(shoppingCart);
         }
 
-        // POST: api/ShoppingCart
-        [ResponseType(typeof(ShoppingCart))]
-        public IHttpActionResult Post([FromBody]ShoppingCart shoppingCart)
+        [Route("api/ShoppingCart/GetAllByProperty/{propertyName}/{propertyValue}"), HttpGet]
+        public IHttpActionResult GetAllByProperty(string propertyName, string propertyValue)
         {
+            var shoppingCarts = shoppingCartRepository.GetAllByProperty(propertyName, propertyValue, includes);
+            return Ok(shoppingCarts);
+        }
+
+        [Route("api/ShoppingCart/GetAllByPropertyILike/{propertyName}/{propertyValue}"), HttpGet]
+        public IHttpActionResult GetAllByPropertyILike(string propertyName, string propertyValue)
+        {
+            var shoppingCarts = shoppingCartRepository.GetAllByPropertyILike(propertyName, propertyValue, includes);
+            return Ok(shoppingCarts);
+        }
+
+        [Route("api/ShoppingCart/Post"), HttpPost]
+        public IHttpActionResult Post([FromBody]ShoppingCartPostDto shoppingCartPostDto)
+        {
+            var shoppingCart = new ShoppingCart();
+
+            shoppingCart.CreationDate = DateTime.Now;
+            shoppingCart.CustomerId = shoppingCartPostDto.CustomerId;
+
             shoppingCartRepository.Add(shoppingCart);
             shoppingCartRepository.SaveChanges();
-            return CreatedAtRoute("DefaultApi", new { id = shoppingCart.CustomerId }, shoppingCart);
-        }
-
-        // PUT: api/ShoppingCart/5
-        [ResponseType(typeof(ShoppingCart))]
-        public IHttpActionResult Put(int id, [FromBody]ShoppingCart shoppingCart)
-        {
-            if (id != shoppingCart.CustomerId)
-                return BadRequest();
-
-            shoppingCartRepository.Update(shoppingCart);
-            shoppingCartRepository.SaveChanges();
-
             return Ok(shoppingCart);
-        }
+        }        
 
-        // DELETE: api/ShoppingCart/5
-        [ResponseType(typeof(ShoppingCart))]
+        [Route("api/ShoppingCart/Delete/{id:int}"), HttpDelete]
         public IHttpActionResult Delete(int id)
         {
-            ShoppingCart shoppingCart = shoppingCartRepository.FindById(id);
+            var shoppingCart = shoppingCartRepository.GetById(id);
 
             if (shoppingCart == null)
                 return NotFound();
 
             shoppingCartRepository.Remove(shoppingCart);
             shoppingCartRepository.SaveChanges();
-
             return Ok(shoppingCart);
         }
     }
 }
-#pragma warning restore 1591

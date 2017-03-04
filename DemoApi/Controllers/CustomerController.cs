@@ -1,58 +1,68 @@
-﻿#pragma warning disable 1591
-
+﻿using DemoApi.Dtos;
 using DemoApi.Models;
 using DemoApi.Persistence.Repositories;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Web;
 using System.Web.Http;
-using System.Web.Http.Description;
+using Omu.ValueInjecter;
 
 namespace DemoApi.Controllers
 {
     public class CustomerController : ApiController
     {
-        /*
-            https://docs.microsoft.com/en-us/azure/best-practices-api-implementation 
-        */
-
-        CustomerRepository customerRepository;
+        private readonly CustomerRepository customerRepository;
 
         public CustomerController()
         {
             customerRepository = new CustomerRepository();
         }
 
-        // GET: api/Customer        
-        [ResponseType(typeof(IEnumerable<Customer>))]
+        [Route("api/Customer/GetAll"), HttpGet]
         public IHttpActionResult GetAll()
         {
-            var customers = customerRepository.FindAll(orderByProperty: "FirstName");
-            return Ok(customers); 
+            var customers = customerRepository.GetAll();
+            return Ok(customers);
         }
 
-        // GET: api/Customer/5
-        [HttpGet]
-        [ResponseType(typeof(Customer))]
-        public IHttpActionResult Get(int id)
+        [Route("api/Customer/GetAllOrderBy/{propertyName}"), HttpGet]
+        public IHttpActionResult GetAllOrderBy(string propertyName)
         {
-            var customer = customerRepository.FindById(id);
+            var customers = customerRepository.GetAllOrderBy(propertyName);
+            return Ok(customers);
+        }
 
-            if (customer == null)
-                return NotFound();
-                        
-            return Ok(customer);            
-        }        
+        [Route("api/Customer/GetById/{id:int}"), HttpGet]
+        public IHttpActionResult GetById(int id)
+        {
+            var customer = customerRepository.GetById(id);
+            return Ok(customer);
+        }
 
-        // POST: api/Customer
-        [ResponseType(typeof(Customer))]
+        [Route("api/Customer/GetAllByProperty/{propertyName}/{propertyValue}"), HttpGet]
+        public IHttpActionResult GetAllByProperty(string propertyName, string propertyValue)
+        {
+            var customers = customerRepository.GetAllByProperty(propertyName, propertyValue);
+            return Ok(customers);
+        }
+
+        [Route("api/Customer/GetAllByPropertyILike/{propertyName}/{propertyValue}"), HttpGet]
+        public IHttpActionResult GetAllByPropertyILike(string propertyName, string propertyValue)
+        {
+            var customers = customerRepository.GetAllByPropertyILike(propertyName, propertyValue);
+            return Ok(customers);
+        }
+
+        [Route("api/Customer/Post"), HttpPost]
         public IHttpActionResult Post([FromBody]Customer customer)
         {
             customerRepository.Add(customer);
             customerRepository.SaveChanges();
-            return CreatedAtRoute("DefaultApi", new { id = customer.Id }, customer);
+            return Ok(customer);
         }
 
-        // PUT: api/Customer/5
-        [ResponseType(typeof(Customer))]
+        [Route("api/Customer/Put"), HttpPut]
         public IHttpActionResult Put(int id, [FromBody]Customer customer)
         {
             if (id != customer.Id)
@@ -60,24 +70,20 @@ namespace DemoApi.Controllers
 
             customerRepository.Update(customer);
             customerRepository.SaveChanges();
-            
             return Ok(customer);
         }
 
-        // DELETE: api/Customer/5
-        [ResponseType(typeof(Customer))]
+        [Route("api/Customer/Delete/{id:int}"), HttpDelete]
         public IHttpActionResult Delete(int id)
         {
-            Customer customer = customerRepository.FindById(id);
+            var customer = customerRepository.GetById(id);
 
             if (customer == null)
                 return NotFound();
 
             customerRepository.Remove(customer);
-            customerRepository.SaveChanges();      
-
+            customerRepository.SaveChanges();
             return Ok(customer);
         }
     }
 }
-#pragma warning restore 1591
