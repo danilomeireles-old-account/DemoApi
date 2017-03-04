@@ -1,10 +1,12 @@
-﻿using DemoApi.Models;
+﻿using DemoApi.Dtos;
+using DemoApi.Models;
 using DemoApi.Persistence.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Http;
+using Omu.ValueInjecter;
 
 namespace DemoApi.Controllers
 {
@@ -15,36 +17,41 @@ namespace DemoApi.Controllers
         public CategoryController()
         {
             categoryRepository = new CategoryRepository();
-        }               
-        
+        }
+
         [Route("api/Category/GetAll"), HttpGet]
         public IHttpActionResult GetAll()
         {
-            return Ok(categoryRepository.GetAll());
+            var categories = categoryRepository.GetAll();
+            return Ok(categories);
         }
 
         [Route("api/Category/GetAllOrderBy/{propertyName}"), HttpGet]
         public IHttpActionResult GetAllOrderBy(string propertyName)
         {
-            return Ok(categoryRepository.GetAllOrderBy(propertyName));
+            var categories = categoryRepository.GetAllOrderBy(propertyName);
+            return Ok(categories);
         }
 
         [Route("api/Category/GetById/{id:int}"), HttpGet]
         public IHttpActionResult GetById(int id)
         {
-            return Ok(categoryRepository.GetById(id));
+            var category = categoryRepository.GetById(id);
+            return Ok(category);
         }
 
         [Route("api/Category/GetAllByProperty/{propertyName}/{propertyValue}"), HttpGet]
         public IHttpActionResult GetAllByProperty(string propertyName, string propertyValue)
         {
-            return Ok(categoryRepository.GetAllByProperty(propertyName, propertyValue));
+            var categories = categoryRepository.GetAllByProperty(propertyName, propertyValue);
+            return Ok(categories);
         }
 
         [Route("api/Category/GetAllByPropertyILike/{propertyName}/{propertyValue}"), HttpGet]
         public IHttpActionResult GetAllByPropertyILike(string propertyName, string propertyValue)
         {
-            return Ok(categoryRepository.GetAllByPropertyILike(propertyName, propertyValue));
+            var categories = categoryRepository.GetAllByPropertyILike(propertyName, propertyValue);
+            return Ok(categories);
         }
 
         [Route("api/Category/Post"), HttpPost]
@@ -54,7 +61,7 @@ namespace DemoApi.Controllers
             categoryRepository.SaveChanges();
             return Ok(category);
         }
-                
+
         [Route("api/Category/Put"), HttpPut]
         public IHttpActionResult Put(int id, [FromBody]Category category)
         {
@@ -63,10 +70,9 @@ namespace DemoApi.Controllers
 
             categoryRepository.Update(category);
             categoryRepository.SaveChanges();
-
             return Ok(category);
         }
-                
+
         [Route("api/Category/Delete/{id:int}"), HttpDelete]
         public IHttpActionResult Delete(int id)
         {
@@ -77,7 +83,6 @@ namespace DemoApi.Controllers
 
             categoryRepository.Remove(category);
             categoryRepository.SaveChanges();
-
             return Ok(category);
         }
     }

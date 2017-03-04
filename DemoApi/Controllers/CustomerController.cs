@@ -1,10 +1,12 @@
-﻿using DemoApi.Models;
+﻿using DemoApi.Dtos;
+using DemoApi.Models;
 using DemoApi.Persistence.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Http;
+using Omu.ValueInjecter;
 
 namespace DemoApi.Controllers
 {
@@ -15,36 +17,41 @@ namespace DemoApi.Controllers
         public CustomerController()
         {
             customerRepository = new CustomerRepository();
-        }               
-        
+        }
+
         [Route("api/Customer/GetAll"), HttpGet]
         public IHttpActionResult GetAll()
         {
-            return Ok(customerRepository.GetAll());
+            var customers = customerRepository.GetAll();
+            return Ok(customers);
         }
 
         [Route("api/Customer/GetAllOrderBy/{propertyName}"), HttpGet]
         public IHttpActionResult GetAllOrderBy(string propertyName)
         {
-            return Ok(customerRepository.GetAllOrderBy(propertyName));
+            var customers = customerRepository.GetAllOrderBy(propertyName);
+            return Ok(customers);
         }
 
         [Route("api/Customer/GetById/{id:int}"), HttpGet]
         public IHttpActionResult GetById(int id)
         {
-            return Ok(customerRepository.GetById(id));
-        }
-
-        [Route("api/Customer/GetAllByPropertyILike/{propertyName}/{propertyValue}"), HttpGet]
-        public IHttpActionResult GetAllByPropertyILike(string propertyName, string propertyValue)
-        {
-            return Ok(customerRepository.GetAllByPropertyILike(propertyName, propertyValue));
+            var customer = customerRepository.GetById(id);
+            return Ok(customer);
         }
 
         [Route("api/Customer/GetAllByProperty/{propertyName}/{propertyValue}"), HttpGet]
         public IHttpActionResult GetAllByProperty(string propertyName, string propertyValue)
         {
-            return Ok(customerRepository.GetAllByProperty(propertyName, propertyValue));
+            var customers = customerRepository.GetAllByProperty(propertyName, propertyValue);
+            return Ok(customers);
+        }
+
+        [Route("api/Customer/GetAllByPropertyILike/{propertyName}/{propertyValue}"), HttpGet]
+        public IHttpActionResult GetAllByPropertyILike(string propertyName, string propertyValue)
+        {
+            var customers = customerRepository.GetAllByPropertyILike(propertyName, propertyValue);
+            return Ok(customers);
         }
 
         [Route("api/Customer/Post"), HttpPost]
@@ -54,7 +61,7 @@ namespace DemoApi.Controllers
             customerRepository.SaveChanges();
             return Ok(customer);
         }
-                
+
         [Route("api/Customer/Put"), HttpPut]
         public IHttpActionResult Put(int id, [FromBody]Customer customer)
         {
@@ -63,10 +70,9 @@ namespace DemoApi.Controllers
 
             customerRepository.Update(customer);
             customerRepository.SaveChanges();
-
             return Ok(customer);
         }
-                
+
         [Route("api/Customer/Delete/{id:int}"), HttpDelete]
         public IHttpActionResult Delete(int id)
         {
@@ -77,7 +83,6 @@ namespace DemoApi.Controllers
 
             customerRepository.Remove(customer);
             customerRepository.SaveChanges();
-
             return Ok(customer);
         }
     }

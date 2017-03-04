@@ -1,50 +1,59 @@
-﻿using DemoApi.Models;
+﻿using DemoApi.Dtos;
+using DemoApi.Models;
 using DemoApi.Persistence.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Http;
+using Omu.ValueInjecter;
 
 namespace DemoApi.Controllers
 {
     public class ProductController : ApiController
     {
         private readonly ProductRepository productRepository;
+        private readonly string[] includes;
 
         public ProductController()
         {
             productRepository = new ProductRepository();
+            includes = new string[] { "Category", "Brand" };
         }
 
         [Route("api/Product/GetAll"), HttpGet]
         public IHttpActionResult GetAll()
         {
-            return Ok(productRepository.GetAll());
+            var products = productRepository.GetAll(includes);
+            return Ok(products);
         }
 
         [Route("api/Product/GetAllOrderBy/{propertyName}"), HttpGet]
         public IHttpActionResult GetAllOrderBy(string propertyName)
         {
-            return Ok(productRepository.GetAllOrderBy(propertyName));
+            var products = productRepository.GetAllOrderBy(propertyName, includes);
+            return Ok(products);
         }
 
         [Route("api/Product/GetById/{id:int}"), HttpGet]
         public IHttpActionResult GetById(int id)
         {
-            return Ok(productRepository.GetById(id));
+            var product = productRepository.GetById(id, includes);
+            return Ok(product);
         }
 
         [Route("api/Product/GetAllByProperty/{propertyName}/{propertyValue}"), HttpGet]
         public IHttpActionResult GetAllByProperty(string propertyName, string propertyValue)
         {
-            return Ok(productRepository.GetAllByProperty(propertyName, propertyValue));
+            var products = productRepository.GetAllByProperty(propertyName, propertyValue, includes);
+            return Ok(products);
         }
 
         [Route("api/Product/GetAllByPropertyILike/{propertyName}/{propertyValue}"), HttpGet]
         public IHttpActionResult GetAllByPropertyILike(string propertyName, string propertyValue)
         {
-            return Ok(productRepository.GetAllByPropertyILike(propertyName, propertyValue));
+            var products = productRepository.GetAllByPropertyILike(propertyName, propertyValue, includes);
+            return Ok(products);
         }
 
         [Route("api/Product/Post"), HttpPost]
@@ -63,7 +72,6 @@ namespace DemoApi.Controllers
 
             productRepository.Update(product);
             productRepository.SaveChanges();
-
             return Ok(product);
         }
 
@@ -77,7 +85,6 @@ namespace DemoApi.Controllers
 
             productRepository.Remove(product);
             productRepository.SaveChanges();
-
             return Ok(product);
         }
     }
