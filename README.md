@@ -15,4 +15,4 @@ This is a demo Web API using:
 </ul>
 
 ## Documentation
-<p><a href="demoapi.danilomeireles.com">demoapi.danilomeireles.com</a></p>
+<p><a href="http://demoapi.danilomeireles.com" target="_blank">demoapi.danilomeireles.com</a></p>
