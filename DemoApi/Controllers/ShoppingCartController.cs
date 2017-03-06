@@ -2,11 +2,7 @@
 using DemoApi.Models;
 using DemoApi.Persistence.Repositories;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Http;
-using Omu.ValueInjecter;
 
 namespace DemoApi.Controllers
 {
@@ -56,8 +52,8 @@ namespace DemoApi.Controllers
             return Ok(shoppingCarts);
         }
 
-        [Route("api/ShoppingCart/Post"), HttpPost]
-        public IHttpActionResult Post([FromBody]ShoppingCartPostDto shoppingCartPostDto)
+        [Route("api/ShoppingCart/Create"), HttpPost]
+        public IHttpActionResult Create([FromBody]ShoppingCartPostDto shoppingCartPostDto)
         {
             var shoppingCart = new ShoppingCart();
 

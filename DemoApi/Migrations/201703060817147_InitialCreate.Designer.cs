@@ -12,7 +12,7 @@ namespace DemoApi.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201702272310560_InitialCreate"; }
+            get { return "201703060817147_InitialCreate"; }
         }
         
         string IMigrationMetadata.Source

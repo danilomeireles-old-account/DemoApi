@@ -39,6 +39,17 @@ namespace DemoApi.Migrations
                 .Index(t => t.EmailAddress, unique: true, name: "unique_email");
             
             CreateTable(
+                "api.ShoppingCart",
+                c => new
+                    {
+                        CustomerId = c.Int(nullable: false),
+                        CreationDate = c.DateTime(nullable: false),
+                    })
+                .PrimaryKey(t => t.CustomerId)
+                .ForeignKey("api.Customer", t => t.CustomerId)
+                .Index(t => t.CustomerId);
+            
+            CreateTable(
                 "api.Product",
                 c => new
                     {
@@ -61,45 +72,33 @@ namespace DemoApi.Migrations
                         ShoppingCartId = c.Int(nullable: false),
                         ProductId = c.Int(nullable: false),
                         Quantity = c.Int(nullable: false),
-                        ShoppingCart_CustomerId = c.Int(),
                     })
                 .PrimaryKey(t => new { t.ShoppingCartId, t.ProductId })
                 .ForeignKey("api.Product", t => t.ProductId)
-                .ForeignKey("api.ShoppingCart", t => t.ShoppingCart_CustomerId)
-                .Index(t => t.ProductId)
-                .Index(t => t.ShoppingCart_CustomerId);
-            
-            CreateTable(
-                "api.ShoppingCart",
-                c => new
-                    {
-                        CustomerId = c.Int(nullable: false),
-                        CreationDate = c.DateTime(nullable: false),
-                    })
-                .PrimaryKey(t => t.CustomerId)
-                .ForeignKey("api.Customer", t => t.CustomerId)
-                .Index(t => t.CustomerId);
+                .ForeignKey("api.ShoppingCart", t => t.ShoppingCartId)
+                .Index(t => t.ShoppingCartId)
+                .Index(t => t.ProductId);
             
         }
         
         public override void Down()
         {
-            DropForeignKey("api.ShoppingCartProduct", "ShoppingCart_CustomerId", "api.ShoppingCart");
-            DropForeignKey("api.ShoppingCart", "CustomerId", "api.Customer");
+            DropForeignKey("api.ShoppingCartProduct", "ShoppingCartId", "api.ShoppingCart");
             DropForeignKey("api.ShoppingCartProduct", "ProductId", "api.Product");
             DropForeignKey("api.Product", "CategoryId", "api.Category");
             DropForeignKey("api.Product", "BrandId", "api.Brand");
-            DropIndex("api.ShoppingCart", new[] { "CustomerId" });
-            DropIndex("api.ShoppingCartProduct", new[] { "ShoppingCart_CustomerId" });
+            DropForeignKey("api.ShoppingCart", "CustomerId", "api.Customer");
             DropIndex("api.ShoppingCartProduct", new[] { "ProductId" });
+            DropIndex("api.ShoppingCartProduct", new[] { "ShoppingCartId" });
             DropIndex("api.Product", new[] { "BrandId" });
             DropIndex("api.Product", new[] { "CategoryId" });
+            DropIndex("api.ShoppingCart", new[] { "CustomerId" });
             DropIndex("api.Customer", "unique_email");
             DropIndex("api.Category", "unique_name");
             DropIndex("api.Brand", "unique_name");
-            DropTable("api.ShoppingCart");
             DropTable("api.ShoppingCartProduct");
             DropTable("api.Product");
+            DropTable("api.ShoppingCart");
             DropTable("api.Customer");
             DropTable("api.Category");
             DropTable("api.Brand");

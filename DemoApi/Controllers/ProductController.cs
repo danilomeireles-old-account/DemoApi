@@ -1,12 +1,6 @@
-﻿using DemoApi.Dtos;
-using DemoApi.Models;
+﻿using DemoApi.Models;
 using DemoApi.Persistence.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Http;
-using Omu.ValueInjecter;
 
 namespace DemoApi.Controllers
 {
@@ -56,16 +50,16 @@ namespace DemoApi.Controllers
             return Ok(products);
         }
 
-        [Route("api/Product/Post"), HttpPost]
-        public IHttpActionResult Post([FromBody]Product product)
+        [Route("api/Product/Create"), HttpPost]
+        public IHttpActionResult Create([FromBody]Product product)
         {
             productRepository.Add(product);
             productRepository.SaveChanges();
             return Ok(product);
         }
 
-        [Route("api/Product/Put"), HttpPut]
-        public IHttpActionResult Put(int id, [FromBody]Product product)
+        [Route("api/Product/Update"), HttpPut]
+        public IHttpActionResult Update(int id, [FromBody]Product product)
         {
             if (id != product.Id)
                 return BadRequest();

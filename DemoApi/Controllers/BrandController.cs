@@ -1,12 +1,6 @@
-﻿using DemoApi.Dtos;
-using DemoApi.Models;
+﻿using DemoApi.Models;
 using DemoApi.Persistence.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Http;
-using Omu.ValueInjecter;
 
 namespace DemoApi.Controllers
 {
@@ -54,16 +48,16 @@ namespace DemoApi.Controllers
             return Ok(brands);
         }
 
-        [Route("api/Brand/Post"), HttpPost]
-        public IHttpActionResult Post([FromBody]Brand brand)
+        [Route("api/Brand/Create"), HttpPost]
+        public IHttpActionResult Create([FromBody]Brand brand)
         {            
             brandRepository.Add(brand);           
             brandRepository.SaveChanges();           
             return Ok(brand);
         }
                 
-        [Route("api/Brand/Put"), HttpPut]
-        public IHttpActionResult Put(int id, [FromBody]Brand brand)
+        [Route("api/Brand/Update"), HttpPut]
+        public IHttpActionResult Update(int id, [FromBody]Brand brand)
         {
             if (id != brand.Id)
                 return BadRequest();

@@ -20,7 +20,7 @@ namespace DemoApi.Persistence.Repositories.Base
                 
         public virtual T GetById(params object[] keyValues)
         {
-            return entity.Find(keyValues);
+            return entity.Find(keyValues);            
         }
         
         public virtual T GetById(int id, string[] includes)
@@ -30,7 +30,7 @@ namespace DemoApi.Persistence.Repositories.Base
                 query = query.Include(include);
             
             return query.AsNoTracking().Where("Id" + "= @0", id).FirstOrDefault();
-        }
+        }        
 
         public virtual T GetById(string idPropertyName, object idPropertyValue, string[] includes)
         {
@@ -92,7 +92,13 @@ namespace DemoApi.Persistence.Repositories.Base
                 DateTime 
             */
 
-            return entity.Where(propertyName + "= @0", propertyValue);
+            int intValue;
+            bool isInt = int.TryParse(propertyValue.ToString(), out intValue);
+
+            if (isInt)
+                return entity.Where(propertyName + "= @0", Convert.ToInt32(propertyValue));
+            else
+                return entity.Where(propertyName + "= @0", propertyValue);            
         }
 
         public virtual IEnumerable<T> GetAllByProperty(string propertyName, object propertyValue, string[] includes)
@@ -116,8 +122,8 @@ namespace DemoApi.Persistence.Repositories.Base
                 decimal
                 DateTime 
             */
-            int intId;
-            bool isInt = int.TryParse(propertyValue.ToString(), out intId);
+            int intValue;
+            bool isInt = int.TryParse(propertyValue.ToString(), out intValue);
 
             if (isInt)                           
                 return query.Where(propertyName + "= @0", Convert.ToInt32(propertyValue));

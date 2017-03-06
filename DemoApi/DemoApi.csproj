@@ -185,6 +185,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\ShoppingCartProduct\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -197,13 +198,14 @@
     <Compile Include="Controllers\BrandController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\ShoppingCartController.cs" />
+    <Compile Include="Controllers\ShoppingCartProductController.cs" />
     <Compile Include="Dtos\ShoppingCartPostDto.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201702272310560_InitialCreate.cs" />
-    <Compile Include="Migrations\201702272310560_InitialCreate.Designer.cs">
-      <DependentUpon>201702272310560_InitialCreate.cs</DependentUpon>
+    <Compile Include="Migrations\201703060817147_InitialCreate.cs" />
+    <Compile Include="Migrations\201703060817147_InitialCreate.Designer.cs">
+      <DependentUpon>201703060817147_InitialCreate.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Brand.cs" />
@@ -264,14 +266,14 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201702272310560_InitialCreate.resx">
-      <DependentUpon>201702272310560_InitialCreate.cs</DependentUpon>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Properties\PublishProfiles\Default Settings.pubxml" />
     <Content Include="Scripts\jquery-3.1.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.1.1.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201703060817147_InitialCreate.resx">
+      <DependentUpon>201703060817147_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
