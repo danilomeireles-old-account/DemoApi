@@ -14,5 +14,8 @@ This is a demo Web API using:
 <li>Etc</li>
 </ul>
 
+## Class Diagram
+![alt tag](https://github.com/danilomeireles/DemoApi/blob/master/DemoApi/Content/Images/ClassDiagram_v1.jpeg)
+
 ## Documentation
 <p><a href="http://demoapi.danilomeireles.com" target="_blank">demoapi.danilomeireles.com</a></p>
