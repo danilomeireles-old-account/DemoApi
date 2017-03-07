@@ -6,6 +6,7 @@
 <li>C#</li>
 <li>ASP.NET Web Api</li>
 <li>Entity Framework</li>
+<li>Linq / Linq.Dynamic</li>
 <li>Migrations</li>
 <li>SQL Server 2016</li>
 <li>Generic Repository Pattern</li>
