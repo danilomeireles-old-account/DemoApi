@@ -1,4 +1,5 @@
-﻿using DemoApi.Models;
+﻿using DemoApi.Dtos;
+using DemoApi.Models;
 using DemoApi.Persistence.Repositories;
 using System.Web.Http;
 
@@ -51,18 +52,36 @@ namespace DemoApi.Controllers
         }
 
         [Route("api/Product/Create"), HttpPost]
-        public IHttpActionResult Create([FromBody]Product product)
+        public IHttpActionResult Create([FromBody]ProductDto productDto)
         {
+            var product = new Product()
+            {
+                Name = productDto.Name,
+                CategoryId = productDto.CategoryId,
+                BrandId = productDto.BrandId,
+                Price = productDto.Price
+            };            
+
             productRepository.Add(product);
             productRepository.SaveChanges();
+            
             return Ok(product);
         }
 
         [Route("api/Product/Update"), HttpPut]
-        public IHttpActionResult Update(int id, [FromBody]Product product)
+        public IHttpActionResult Update(int id, [FromBody]ProductDto productDto)
         {
-            if (id != product.Id)
+            if (id != productDto.Id)
                 return BadRequest();
+
+            var product = new Product()
+            {
+                Id = productDto.Id,
+                Name = productDto.Name,
+                CategoryId = productDto.CategoryId,
+                BrandId = productDto.BrandId,
+                Price = productDto.Price
+            };
 
             productRepository.Update(product);
             productRepository.SaveChanges();

@@ -1,4 +1,5 @@
-﻿using DemoApi.Models;
+﻿using DemoApi.Dtos;
+using DemoApi.Models;
 using DemoApi.Persistence.Repositories;
 using System.Web.Http;
 
@@ -51,18 +52,33 @@ namespace DemoApi.Controllers
         }
 
         [Route("api/Customer/Create"), HttpPost]
-        public IHttpActionResult Create([FromBody]Customer customer)
+        public IHttpActionResult Create([FromBody]CustomerDto customerDto)
         {
+            var customer = new Customer()
+            {
+                FirstName = customerDto.FirstName,
+                LastName = customerDto.LastName,
+                EmailAddress = customerDto.EmailAddress
+            };
+
             customerRepository.Add(customer);
             customerRepository.SaveChanges();
             return Ok(customer);
         }
 
         [Route("api/Customer/Update"), HttpPut]
-        public IHttpActionResult Update(int id, [FromBody]Customer customer)
+        public IHttpActionResult Update(int id, [FromBody]CustomerDto customerDto)
         {
-            if (id != customer.Id)
+            if (id != customerDto.Id)
                 return BadRequest();
+
+            var customer = new Customer()
+            {
+                Id = customerDto.Id,
+                FirstName = customerDto.FirstName,
+                LastName = customerDto.LastName,
+                EmailAddress = customerDto.EmailAddress
+            };
 
             customerRepository.Update(customer);
             customerRepository.SaveChanges();

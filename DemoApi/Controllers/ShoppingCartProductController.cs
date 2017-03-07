@@ -1,4 +1,5 @@
-﻿using DemoApi.Models;
+﻿using DemoApi.Dtos;
+using DemoApi.Models;
 using DemoApi.Persistence.Repositories;
 using System.Web.Http;
 
@@ -51,18 +52,32 @@ namespace DemoApi.Controllers
         }
 
         [Route("api/ShoppingCartProduct/Create"), HttpPost]
-        public IHttpActionResult Create([FromBody]ShoppingCartProduct shoppingCartProduct)
+        public IHttpActionResult Create([FromBody]ShoppingCartProductDto shoppingCartProductDto)
         {
+            var shoppingCartProduct = new ShoppingCartProduct()
+            {
+                ShoppingCartId = shoppingCartProductDto.ShoppingCartId,
+                ProductId = shoppingCartProductDto.ProductId,
+                Quantity = shoppingCartProductDto.Quantity
+            };
+
             shoppingCartProductRepository.Add(shoppingCartProduct);
             shoppingCartProductRepository.SaveChanges();
             return Ok(shoppingCartProduct);
         }
 
         [Route("api/Update/{shoppingCartId:int}/{productId:int}"), HttpPut]
-        public IHttpActionResult Update(int shoppingCartId, int productId, [FromBody]ShoppingCartProduct shoppingCartProduct)
+        public IHttpActionResult Update(int shoppingCartId, int productId, [FromBody]ShoppingCartProductDto shoppingCartProductDto)
         {
-            if (shoppingCartId != shoppingCartProduct.ShoppingCartId || productId != shoppingCartProduct.ProductId)
+            if (shoppingCartId != shoppingCartProductDto.ShoppingCartId || productId != shoppingCartProductDto.ProductId)
                 return BadRequest();
+
+            var shoppingCartProduct = new ShoppingCartProduct()
+            {                
+                ShoppingCartId = shoppingCartProductDto.ShoppingCartId,
+                ProductId = shoppingCartProductDto.ProductId,
+                Quantity = shoppingCartProductDto.Quantity
+            };
 
             shoppingCartProductRepository.Update(shoppingCartProduct);
             shoppingCartProductRepository.SaveChanges();

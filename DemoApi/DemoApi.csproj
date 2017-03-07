@@ -198,7 +198,10 @@
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\ShoppingCartController.cs" />
     <Compile Include="Controllers\ShoppingCartProductController.cs" />
+    <Compile Include="Dtos\CustomerDto.cs" />
+    <Compile Include="Dtos\ProductDto.cs" />
     <Compile Include="Dtos\ShoppingCartPostDto.cs" />
+    <Compile Include="Dtos\ShoppingCartProductDto.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -222,7 +225,6 @@
     <Compile Include="Persistence\Repositories\CustomerRepository.cs" />
     <Compile Include="Persistence\Repositories\Base\GenericRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Util\ValidationUtil.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
