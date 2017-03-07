@@ -16,6 +16,7 @@
 </ul>
 
 ## Class Diagram
+<p>For this example, I created a very simple diagram class with only five classes that represent a part of an online store scenario.</p>
 <p>Namespace DemoApi.Models</p>
 ![alt tag](https://github.com/danilomeireles/DemoApi/blob/master/DemoApi/Content/Images/ClassDiagram_v1.jpeg)
 
