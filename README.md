@@ -1,3 +1,5 @@
+# ![alt tag](https://github.com/danilomeireles/DemoApi/blob/master/DemoApi/Content/Images/ClassDiagram_v1.jpeg)
+
 # Demo Api
 
 <p>This is a demo Web API created for learning and testing purpose.</p>
