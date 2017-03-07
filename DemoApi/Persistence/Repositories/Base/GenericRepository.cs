@@ -1,9 +1,11 @@
-﻿using System;
+﻿using MEAC.Util.Validation;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Linq.Dynamic;
 using System.Linq.Expressions;
+using System.Reflection;
 
 namespace DemoApi.Persistence.Repositories.Base
 {
@@ -73,55 +75,30 @@ namespace DemoApi.Persistence.Repositories.Base
         {
             return entity.Where(predicate);
         }
-
+                
         public virtual IEnumerable<T> GetAllByProperty(string propertyName, object propertyValue)
         {
-            // TODO: Verify propertyValue types here.
-            /*
-                sbyte
-                byte
-                short
-                ushort
-                int
-                uint
-                long
-                ulong
-                float
-                double
-                decimal
-                DateTime 
-            */
+            Type propertyType = GetPropertyType(propertyName);
+            return entity.Where(propertyName + "= @0", Convert.ChangeType(propertyValue, propertyType));
+        }        
+                
+        public virtual IEnumerable<T> GetAllByProperty(string propertyName, string propertyValue, string[] includes)
+        {
+            Type propertyType = GetPropertyType(propertyName);
 
-            int intValue;
-            bool isInt = int.TryParse(propertyValue.ToString(), out intValue);
-
-            if (isInt)
-                return entity.Where(propertyName + "= @0", Convert.ToInt32(propertyValue));
-            else
-                return entity.Where(propertyName + "= @0", propertyValue);            
-        }
+            var query = entity.AsQueryable();
+            foreach (string include in includes)
+                query = query.Include(include);
+           
+            return query.Where(propertyName + "= @0", Convert.ChangeType(propertyValue, propertyType));
+        }        
 
         public virtual IEnumerable<T> GetAllByProperty(string propertyName, object propertyValue, string[] includes)
         {
             var query = entity.AsQueryable();
             foreach (string include in includes)
                 query = query.Include(include);
-
-            // TODO: Verify propertyValue types here.
-            /*
-                sbyte
-                byte
-                short
-                ushort
-                int
-                uint
-                long
-                ulong
-                float
-                double
-                decimal
-                DateTime 
-            */
+            
             int intValue;
             bool isInt = int.TryParse(propertyValue.ToString(), out intValue);
 
@@ -147,7 +124,6 @@ namespace DemoApi.Persistence.Repositories.Base
 
         public virtual T GetOneByProperty(string propertyName, object propertyValue)
         {
-            //Ex: List<Car> cars = dbContext.Cars.Where("CarYear = @0 and ABS = @1", 2006, true).ToList();
             return entity.Where(propertyName + "= @0", propertyValue).SingleOrDefault();
         }
 
@@ -198,6 +174,24 @@ namespace DemoApi.Persistence.Repositories.Base
         public void Dispose()
         {
             context.Dispose();
-        }            
+        }
+
+        private Type GetPropertyType(string propertyName)
+        {
+            Type propertyType = null;
+
+            if (!propertyName.Contains("."))
+                propertyType = typeof(T).GetProperty(propertyName).PropertyType;
+            else
+            {
+                string[] propertyNames = propertyName.Split(new char[] { '.' }, StringSplitOptions.None);
+                propertyType = typeof(T).GetProperty(propertyNames[0]).PropertyType;
+
+                for (int i = 1; i < propertyNames.Length; i++)
+                    propertyType = propertyType.GetProperty(propertyNames[i]).PropertyType;
+            }
+
+            return propertyType;
+        }
     }
 }
