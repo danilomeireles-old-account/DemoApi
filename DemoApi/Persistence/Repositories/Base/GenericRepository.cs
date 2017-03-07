@@ -124,16 +124,19 @@ namespace DemoApi.Persistence.Repositories.Base
 
         public virtual T GetOneByProperty(string propertyName, object propertyValue)
         {
-            return entity.Where(propertyName + "= @0", propertyValue).SingleOrDefault();
+            Type propertyType = GetPropertyType(propertyName);
+            return entity.Where(propertyName + "= @0", Convert.ChangeType(propertyValue, propertyType)).SingleOrDefault();
         }
 
         public virtual T GetOneByProperty(string propertyName, object propertyValue, string[] includes)
         {
+            Type propertyType = GetPropertyType(propertyName);
+
             var query = entity.AsQueryable();
             foreach (string include in includes)
                 query = query.Include(include);
 
-            return query.Where(propertyName + "= @0", propertyValue).SingleOrDefault();
+            return query.Where(propertyName + "= @0", Convert.ChangeType(propertyValue, propertyType)).SingleOrDefault();
         }
 
         public bool Exists(string propertyName, object propertyValue)
