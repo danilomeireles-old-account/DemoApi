@@ -1,4 +1,4 @@
-# ![alt tag](https://github.com/danilomeireles/DemoApi/blob/master/DemoApi/Content/Images/ClassDiagram_v1.jpeg)
+# <a href="http://demoapi.danilomeireles.com" target="_blank">http://demoapi.danilomeireles.com</a>
 
 # Demo Api
 
