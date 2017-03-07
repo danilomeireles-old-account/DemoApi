@@ -1,6 +1,4 @@
-# <a href="http://demoapi.danilomeireles.com" target="_blank">http://demoapi.danilomeireles.com</a>
-
-# Demo Api
+# Demo Api (<a href="http://demoapi.danilomeireles.com" target="_blank">demoapi.danilomeireles.com</a>)
 
 <p>This is a demo Web API created for learning and testing purpose.</p>
 <p>In this API I am using:</p>
