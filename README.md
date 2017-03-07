@@ -22,3 +22,4 @@
 ## Documentation
 <p>The API is published and running at <a href="http://demoapi.danilomeireles.com" target="_blank">demoapi.danilomeireles.com</a>.</p>
 <p>All the documentation was generated using <b>swagger.</b></p>
+![alt tag](https://github.com/danilomeireles/DemoApi/blob/master/DemoApi/Content/Images/SwaggerUi_1.jpeg)
