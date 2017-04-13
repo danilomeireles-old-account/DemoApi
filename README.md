@@ -18,9 +18,9 @@
 ## Class Diagram
 <p>For this example, I created a very simple class model with only five classes that represent a part of an online store scenario.</p>
 <p>Namespace DemoApi.Models</p>
-![alt tag](https://github.com/danilomeireles/DemoApi/blob/master/DemoApi/Content/Images/ClassDiagram_v1.jpeg)
+<img src="https://github.com/danilomeireles/DemoApi/blob/master/DemoApi/Content/Images/ClassDiagram_v1.jpeg" alt="Class Diagram">
 
 ## Documentation
 <p>The API is published and running at <a href="http://demoapi.danilomeireles.com" target="_blank">demoapi.danilomeireles.com</a>.</p>
 <p>All the documentation was generated using <b>swagger.</b></p>
-![alt tag](https://github.com/danilomeireles/DemoApi/blob/master/DemoApi/Content/Images/swagger1.jpeg)
+<img src="https://github.com/danilomeireles/DemoApi/blob/master/DemoApi/Content/Images/swagger1.jpeg" alt="Documentation">
